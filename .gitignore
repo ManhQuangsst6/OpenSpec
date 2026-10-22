@@ -7,3 +7,7 @@ dist/
 coverage/
 TestResults/
 .env*.local
+
+# Biến môi trường deploy (chứa mật khẩu)
+.env
+!.env.example

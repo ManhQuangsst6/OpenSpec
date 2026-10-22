@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
+builder.Services.AddHealthChecks();
 // Số trong JSON luôn là number (mặc định web cho phép chuỗi, khiến OpenAPI sinh kiểu integer | string)
 builder.Services.ConfigureHttpJsonOptions(options => options.SerializerOptions.NumberHandling = JsonNumberHandling.Strict);
 
@@ -31,6 +32,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapHealthChecks("/health");
 
 app.MapUsersEndpoints();
 app.MapCatalogEndpoints();

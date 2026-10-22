@@ -1,0 +1,129 @@
+name: CD
+
+# - main: chỉ chạy sau khi CI trên main xanh → đẩy image tag `latest` + `sha-<commit>` lên GHCR
+# - tag v*: đẩy image theo phiên bản (v1.2.0 → 1.2.0, 1.2)
+# - pull request: build image + chạy thử cả stack bằng docker compose, không đẩy
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  push:
+    tags: ['v*']
+  pull_request:
+    paths:
+      - 'backend/**'
+      - 'frontend/**'
+      - 'deploy/docker/**'
+      - '.github/workflows/cd.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-${{ github.event.workflow_run.head_branch || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  smoke:
+    name: Smoke test (docker compose)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    env:
+      COMPOSE: docker compose -f deploy/docker/docker-compose.prod.yml --env-file deploy/docker/.env.example
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Registry name (tên image Docker phải viết thường)
+        run: echo "REGISTRY=ghcr.io/${OWNER,,}" >> "$GITHUB_ENV"
+        env:
+          OWNER: ${{ github.repository_owner }}
+
+      - name: Build images
+        run: $COMPOSE build
+
+      - name: Start stack
+        run: $COMPOSE up -d --wait --wait-timeout 300
+
+      - name: Check web, SPA routes and API through nginx
+        run: |
+          set -eux
+          curl -fsS http://localhost:8080/ | grep -q '<div id="root">'
+          curl -fsS http://localhost:8080/products | grep -q '<div id="root">'
+          curl -fsS -X POST http://localhost:8080/api/users -H 'Content-Type: application/json' \
+            -d '{"email":"smoke@example.com","fullName":"Smoke"}' | grep -q '"email":"smoke@example.com"'
+          curl -fsS -X POST http://localhost:8080/api/catalog/products -H 'Content-Type: application/json' \
+            -d '{"sku":"SMOKE-01","name":"Smoke","price":1000,"stock":1,"isActive":true}' | grep -q '"sku":"SMOKE-01"'
+          curl -fsS 'http://localhost:8080/api/catalog/products?sortBy=price' | grep -q '"totalCount":1'
+
+      - name: Logs on failure
+        if: failure()
+        run: $COMPOSE logs --no-color
+
+      - name: Stop stack
+        if: always()
+        run: $COMPOSE down -v
+
+  publish:
+    name: Publish ${{ matrix.image }}
+    if: >-
+      github.event_name == 'push' ||
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: openspec-api
+            context: backend
+            target: api
+          - image: openspec-migrator
+            context: backend
+            target: migrator
+          - image: openspec-web
+            context: frontend
+            target: web
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # workflow_run: build đúng commit mà CI đã kiểm tra
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Registry name (tên image Docker phải viết thường)
+        run: echo "REGISTRY=ghcr.io/${OWNER,,}" >> "$GITHUB_ENV"
+        env:
+          OWNER: ${{ github.repository_owner }}
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - id: meta
+        uses: docker/metadata-action@v5
+        with:
+          context: git
+          images: ${{ env.REGISTRY }}/${{ matrix.image }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=raw,value=latest,enable=${{ github.event_name == 'workflow_run' }}
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          target: ${{ matrix.target }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.image }}
+          cache-to: type=gha,scope=${{ matrix.image }},mode=max
