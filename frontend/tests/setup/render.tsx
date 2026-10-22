@@ -3,14 +3,23 @@ import { render } from '@testing-library/react'
 import { App as AntApp, ConfigProvider } from 'antd'
 import viVN from 'antd/locale/vi_VN'
 import type { ReactElement } from 'react'
+import { createMemoryRouter, RouterProvider } from 'react-router'
 
-export function renderWithProviders(ui: ReactElement) {
+/**
+ * Render với QueryClient, antd và router trong bộ nhớ.
+ * `route` là URL ban đầu; đọc URL hiện tại qua `router.state.location`.
+ */
+export function renderWithProviders(ui: ReactElement, { route = '/' }: { route?: string } = {}) {
   const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } })
-  return render(
+  const router = createMemoryRouter([{ path: '*', element: ui }], { initialEntries: [route] })
+  const result = render(
     <QueryClientProvider client={queryClient}>
       <ConfigProvider locale={viVN}>
-        <AntApp>{ui}</AntApp>
+        <AntApp>
+          <RouterProvider router={router} />
+        </AntApp>
       </ConfigProvider>
     </QueryClientProvider>,
   )
+  return { ...result, router }
 }

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using OpenSpec.Modules.Catalog.Infrastructure.Persistence;
 using OpenSpec.Modules.Users.Infrastructure.Persistence;
 
 namespace OpenSpec.Api.IntegrationTests.Fixtures;
@@ -20,6 +21,7 @@ public sealed class ApiFactory : WebApplicationFactory<Program>, IAsyncLifetime
 
         using var scope = Services.CreateScope();
         await scope.ServiceProvider.GetRequiredService<UsersDbContext>().Database.MigrateAsync();
+        await scope.ServiceProvider.GetRequiredService<CatalogDbContext>().Database.MigrateAsync();
     }
 
     async Task IAsyncLifetime.DisposeAsync()

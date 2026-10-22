@@ -1,10 +1,18 @@
-import { TeamOutlined } from '@ant-design/icons'
+import { ShoppingOutlined, TeamOutlined } from '@ant-design/icons'
 import { Layout, Menu, Typography } from 'antd'
-import { Outlet } from 'react-router'
+import { Outlet, useLocation, useNavigate } from 'react-router'
 
 const { Header, Content } = Layout
 
+const menuItems = [
+  { key: '/', icon: <TeamOutlined />, label: 'Người dùng' },
+  { key: '/products', icon: <ShoppingOutlined />, label: 'Sản phẩm' },
+]
+
 export function AppLayout() {
+  const { pathname } = useLocation()
+  const navigate = useNavigate()
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
@@ -14,8 +22,9 @@ export function AppLayout() {
         <Menu
           theme="dark"
           mode="horizontal"
-          selectedKeys={['users']}
-          items={[{ key: 'users', icon: <TeamOutlined />, label: 'Người dùng' }]}
+          selectedKeys={[pathname.startsWith('/products') ? '/products' : '/']}
+          items={menuItems}
+          onClick={({ key }) => navigate(key)}
           style={{ flex: 1, minWidth: 0 }}
         />
       </Header>

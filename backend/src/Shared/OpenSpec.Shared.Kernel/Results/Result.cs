@@ -1,6 +1,6 @@
 namespace OpenSpec.Shared.Kernel.Results;
 
-public sealed record Error(string Code, string Message);
+public record Error(string Code, string Message);
 
 public class Result
 {

@@ -10,5 +10,3 @@ public sealed record UserDto(Guid Id, string Email, string FullName, DateTimeOff
 public sealed record CreateUserRequest(string Email, string FullName);
 
 public sealed record UpdateUserRequest(string Email, string FullName);
-
-public sealed record PagedResult<T>(IReadOnlyList<T> Items, int Page, int PageSize, int TotalCount);
