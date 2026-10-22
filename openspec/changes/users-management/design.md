@@ -50,7 +50,8 @@ Module Users mới có `User.Create(email)` (kiểm tra email bằng `Contains('
 
 ### Frontend
 - `modules/users/api/usersApi.ts`: hook `useUsers(params)`, `useCreateUser`, `useUpdateUser`, `useDeleteUser` (invalidate query `['users']`).
-- `UsersPage` gồm ô tìm kiếm (debounce 300ms), bảng, phân trang Trước/Sau, nút "Thêm"; `UserFormDialog` dùng thẻ `<dialog>`/form có kiểm tra phía client cơ bản; xoá dùng `window.confirm`. Không thêm thư viện UI/form mới.
+- Dùng **Ant Design 6** (locale `vi_VN`) làm thư viện UI cho toàn dự án; `AppProviders` bọc `ConfigProvider` + `App`, `AppLayout` có header/menu. Phương án ban đầu (HTML thuần, không thư viện) bị loại vì giao diện quá sơ sài; antd chọn thay Mantine/MUI/shadcn vì có sẵn Table phân trang, Modal Form, Popconfirm cho trang quản trị.
+- `UsersPage`: `Table` (phân trang server, chọn kích thước trang), ô tìm kiếm debounce 300ms, nút "Thêm người dùng"; `UserFormDialog` là `Modal` + `Form` (kiểm tra phía client, lỗi từ API gắn vào trường); xoá qua `Popconfirm`; thông báo kết quả bằng `message`.
 - Lỗi 409 hiển thị ngay trong form ("Email đã được sử dụng"); lỗi 400 map theo trường.
 
 ### Test

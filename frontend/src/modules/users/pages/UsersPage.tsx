@@ -1,16 +1,21 @@
+import { DeleteOutlined, EditOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
+import { Alert, App, Button, Card, Flex, Input, Popconfirm, Space, Table, Tooltip, Typography } from 'antd'
+import type { TableProps } from 'antd'
 import { useEffect, useState } from 'react'
 import { useDeleteUser, useUsers, type User } from '@/modules/users/api/usersApi'
 import { UserFormDialog } from '@/modules/users/components/UserFormDialog'
 
-const PAGE_SIZE = 20
+const DEFAULT_PAGE_SIZE = 20
 const SEARCH_DEBOUNCE_MS = 300
 
 const dateFormat = new Intl.DateTimeFormat('vi-VN', { dateStyle: 'short', timeStyle: 'short' })
 
 export function UsersPage() {
+  const { message } = App.useApp()
   const [searchInput, setSearchInput] = useState('')
   const [search, setSearch] = useState('')
   const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(DEFAULT_PAGE_SIZE)
   // undefined: đóng form; null: tạo mới; User: sửa
   const [editing, setEditing] = useState<User | null | undefined>(undefined)
 
@@ -22,100 +27,104 @@ export function UsersPage() {
     return () => clearTimeout(timer)
   }, [searchInput])
 
-  const { data, isPending, isError, error } = useUsers({ page, pageSize: PAGE_SIZE, search })
+  const { data, isPending, isFetching, isError, error } = useUsers({ page, pageSize, search })
   const deleteUser = useDeleteUser()
 
-  function handleDelete(user: User) {
-    if (!window.confirm(`Xoá người dùng ${user.email}?`)) return
-    deleteUser.mutate(user.id)
+  async function handleDelete(user: User) {
+    try {
+      await deleteUser.mutateAsync(user.id)
+      message.success(`Đã xoá ${user.email}.`)
+    } catch (err) {
+      message.error(`Xoá thất bại: ${err instanceof Error ? err.message : ''}`)
+    }
   }
 
-  const totalPages = data ? Math.max(1, Math.ceil(data.totalCount / PAGE_SIZE)) : 1
+  const columns: TableProps<User>['columns'] = [
+    { title: 'Email', dataIndex: 'email', key: 'email' },
+    { title: 'Họ tên', dataIndex: 'fullName', key: 'fullName' },
+    {
+      title: 'Ngày tạo',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: 180,
+      render: (value: string) => dateFormat.format(new Date(value)),
+    },
+    {
+      title: 'Thao tác',
+      key: 'actions',
+      width: 120,
+      align: 'right',
+      render: (_, user) => (
+        <Space>
+          <Tooltip title="Sửa">
+            <Button type="text" icon={<EditOutlined />} aria-label={`Sửa ${user.email}`} onClick={() => setEditing(user)} />
+          </Tooltip>
+          <Popconfirm
+            title="Xoá người dùng"
+            description={`Xoá người dùng ${user.email}?`}
+            okText="Xoá"
+            cancelText="Huỷ"
+            okButtonProps={{ danger: true }}
+            onConfirm={() => handleDelete(user)}
+          >
+            <Tooltip title="Xoá">
+              <Button type="text" danger icon={<DeleteOutlined />} aria-label={`Xoá ${user.email}`} />
+            </Tooltip>
+          </Popconfirm>
+        </Space>
+      ),
+    },
+  ]
 
   return (
-    <main>
-      <h1>Người dùng</h1>
+    <Card>
+      <Flex justify="space-between" align="center" gap={16} wrap style={{ marginBottom: 16 }}>
+        <Typography.Title level={3} style={{ margin: 0 }}>
+          Người dùng
+        </Typography.Title>
+        <Space wrap>
+          <Input
+            allowClear
+            prefix={<SearchOutlined />}
+            aria-label="Tìm theo email hoặc họ tên"
+            placeholder="Tìm theo email hoặc họ tên"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            style={{ width: 280 }}
+          />
+          <Button type="primary" icon={<PlusOutlined />} onClick={() => setEditing(null)}>
+            Thêm người dùng
+          </Button>
+        </Space>
+      </Flex>
 
-      <div>
-        <input
-          type="search"
-          aria-label="Tìm theo email hoặc họ tên"
-          placeholder="Tìm theo email hoặc họ tên"
-          value={searchInput}
-          onChange={(e) => setSearchInput(e.target.value)}
-        />
-        <button type="button" onClick={() => setEditing(null)}>
-          Thêm người dùng
-        </button>
-      </div>
-
-      {deleteUser.isError && <p role="alert">Xoá thất bại: {deleteUser.error.message}</p>}
-
-      {isPending ? (
-        <p>Đang tải...</p>
-      ) : isError ? (
-        <p role="alert">Không tải được danh sách người dùng: {error.message}</p>
+      {isError ? (
+        <Alert type="error" showIcon title={`Không tải được danh sách người dùng: ${error.message}`} />
       ) : (
-        <>
-          <p>Tổng số: {data.totalCount}</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Email</th>
-                <th>Họ tên</th>
-                <th>Ngày tạo</th>
-                <th>
-                  <span className="sr-only">Thao tác</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.items.length === 0 ? (
-                <tr>
-                  <td colSpan={4}>Không có người dùng nào.</td>
-                </tr>
-              ) : (
-                data.items.map((user) => (
-                  <tr key={user.id}>
-                    <td>{user.email}</td>
-                    <td>{user.fullName}</td>
-                    <td>{dateFormat.format(new Date(user.createdAt))}</td>
-                    <td>
-                      <button type="button" onClick={() => setEditing(user)} aria-label={`Sửa ${user.email}`}>
-                        Sửa
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(user)}
-                        disabled={deleteUser.isPending}
-                        aria-label={`Xoá ${user.email}`}
-                      >
-                        Xoá
-                      </button>
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
-
-          <nav aria-label="Phân trang">
-            <button type="button" onClick={() => setPage((p) => p - 1)} disabled={page <= 1}>
-              Trước
-            </button>
-            <span>
-              Trang {page}/{totalPages}
-            </span>
-            <button type="button" onClick={() => setPage((p) => p + 1)} disabled={page >= totalPages}>
-              Sau
-            </button>
-          </nav>
-        </>
+        <Table<User>
+          rowKey="id"
+          columns={columns}
+          dataSource={data?.items}
+          loading={isPending || isFetching}
+          locale={{ emptyText: 'Không có người dùng nào.' }}
+          pagination={{
+            current: page,
+            pageSize,
+            total: data?.totalCount ?? 0,
+            showSizeChanger: true,
+            pageSizeOptions: [10, 20, 50, 100],
+            showTotal: (total) => `Tổng số: ${total}`,
+            onChange: (nextPage, nextSize) => {
+              setPage(nextSize === pageSize ? nextPage : 1)
+              setPageSize(nextSize)
+            },
+          }}
+        />
       )}
 
       {editing !== undefined && (
         <UserFormDialog key={editing?.id ?? 'new'} user={editing} onClose={() => setEditing(undefined)} />
       )}
-    </main>
+    </Card>
   )
 }
