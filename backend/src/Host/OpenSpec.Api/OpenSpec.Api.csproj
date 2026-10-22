@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <ItemGroup>
+    <ProjectReference Include="../../Modules/Users/OpenSpec.Modules.Users.Api/OpenSpec.Modules.Users.Api.csproj" />
+    <ProjectReference Include="../../Modules/Catalog/OpenSpec.Modules.Catalog.Api/OpenSpec.Modules.Catalog.Api.csproj" />
+    <ProjectReference Include="../../Modules/Orders/OpenSpec.Modules.Orders.Api/OpenSpec.Modules.Orders.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Scalar.AspNetCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+  </ItemGroup>
+
+</Project>

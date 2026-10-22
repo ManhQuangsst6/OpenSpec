@@ -1,0 +1,47 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Host/">
+    <Project Path="src/Host/OpenSpec.Api/OpenSpec.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/" />
+  <Folder Name="/src/Modules/Catalog/">
+    <Project Path="src/Modules/Catalog/OpenSpec.Modules.Catalog.Api/OpenSpec.Modules.Catalog.Api.csproj" />
+    <Project Path="src/Modules/Catalog/OpenSpec.Modules.Catalog.Application/OpenSpec.Modules.Catalog.Application.csproj" />
+    <Project Path="src/Modules/Catalog/OpenSpec.Modules.Catalog.Contracts/OpenSpec.Modules.Catalog.Contracts.csproj" />
+    <Project Path="src/Modules/Catalog/OpenSpec.Modules.Catalog.Domain/OpenSpec.Modules.Catalog.Domain.csproj" />
+    <Project Path="src/Modules/Catalog/OpenSpec.Modules.Catalog.Infrastructure/OpenSpec.Modules.Catalog.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Orders/">
+    <Project Path="src/Modules/Orders/OpenSpec.Modules.Orders.Api/OpenSpec.Modules.Orders.Api.csproj" />
+    <Project Path="src/Modules/Orders/OpenSpec.Modules.Orders.Application/OpenSpec.Modules.Orders.Application.csproj" />
+    <Project Path="src/Modules/Orders/OpenSpec.Modules.Orders.Contracts/OpenSpec.Modules.Orders.Contracts.csproj" />
+    <Project Path="src/Modules/Orders/OpenSpec.Modules.Orders.Domain/OpenSpec.Modules.Orders.Domain.csproj" />
+    <Project Path="src/Modules/Orders/OpenSpec.Modules.Orders.Infrastructure/OpenSpec.Modules.Orders.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Modules/Users/">
+    <Project Path="src/Modules/Users/OpenSpec.Modules.Users.Api/OpenSpec.Modules.Users.Api.csproj" />
+    <Project Path="src/Modules/Users/OpenSpec.Modules.Users.Application/OpenSpec.Modules.Users.Application.csproj" />
+    <Project Path="src/Modules/Users/OpenSpec.Modules.Users.Contracts/OpenSpec.Modules.Users.Contracts.csproj" />
+    <Project Path="src/Modules/Users/OpenSpec.Modules.Users.Domain/OpenSpec.Modules.Users.Domain.csproj" />
+    <Project Path="src/Modules/Users/OpenSpec.Modules.Users.Infrastructure/OpenSpec.Modules.Users.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/src/Shared/">
+    <Project Path="src/Shared/OpenSpec.Shared.Contracts/OpenSpec.Shared.Contracts.csproj" />
+    <Project Path="src/Shared/OpenSpec.Shared.Infrastructure/OpenSpec.Shared.Infrastructure.csproj" />
+    <Project Path="src/Shared/OpenSpec.Shared.Kernel/OpenSpec.Shared.Kernel.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OpenSpec.Api.IntegrationTests/OpenSpec.Api.IntegrationTests.csproj" />
+    <Project Path="tests/OpenSpec.ArchitectureTests/OpenSpec.ArchitectureTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/" />
+  <Folder Name="/tests/Modules/Catalog/">
+    <Project Path="tests/Modules/Catalog/OpenSpec.Modules.Catalog.UnitTests/OpenSpec.Modules.Catalog.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/Orders/">
+    <Project Path="tests/Modules/Orders/OpenSpec.Modules.Orders.UnitTests/OpenSpec.Modules.Orders.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Modules/Users/">
+    <Project Path="tests/Modules/Users/OpenSpec.Modules.Users.UnitTests/OpenSpec.Modules.Users.UnitTests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,8 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="../../../../src/Modules/Users/OpenSpec.Modules.Users.Domain/OpenSpec.Modules.Users.Domain.csproj" />
+    <ProjectReference Include="../../../../src/Modules/Users/OpenSpec.Modules.Users.Application/OpenSpec.Modules.Users.Application.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,85 @@
+{
+  "openapi": "3.1.1",
+  "info": {
+    "title": "OpenSpec.Api | v1",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5080/"
+    }
+  ],
+  "paths": {
+    "/api/users/ping": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "operationId": "UsersPing",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/catalog/ping": {
+      "get": {
+        "tags": [
+          "Catalog"
+        ],
+        "operationId": "CatalogPing",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/orders/ping": {
+      "get": {
+        "tags": [
+          "Orders"
+        ],
+        "operationId": "OrdersPing",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Users"
+    },
+    {
+      "name": "Catalog"
+    },
+    {
+      "name": "Orders"
+    }
+  ]
+}

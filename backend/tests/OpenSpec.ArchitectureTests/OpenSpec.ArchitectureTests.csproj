@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="../../src/Modules/Users/OpenSpec.Modules.Users.Domain/OpenSpec.Modules.Users.Domain.csproj" />
+    <ProjectReference Include="../../src/Modules/Users/OpenSpec.Modules.Users.Application/OpenSpec.Modules.Users.Application.csproj" />
+    <ProjectReference Include="../../src/Modules/Users/OpenSpec.Modules.Users.Infrastructure/OpenSpec.Modules.Users.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Modules/Users/OpenSpec.Modules.Users.Api/OpenSpec.Modules.Users.Api.csproj" />
+    <ProjectReference Include="../../src/Modules/Users/OpenSpec.Modules.Users.Contracts/OpenSpec.Modules.Users.Contracts.csproj" />
+    <ProjectReference Include="../../src/Modules/Catalog/OpenSpec.Modules.Catalog.Domain/OpenSpec.Modules.Catalog.Domain.csproj" />
+    <ProjectReference Include="../../src/Modules/Catalog/OpenSpec.Modules.Catalog.Application/OpenSpec.Modules.Catalog.Application.csproj" />
+    <ProjectReference Include="../../src/Modules/Catalog/OpenSpec.Modules.Catalog.Infrastructure/OpenSpec.Modules.Catalog.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Modules/Catalog/OpenSpec.Modules.Catalog.Api/OpenSpec.Modules.Catalog.Api.csproj" />
+    <ProjectReference Include="../../src/Modules/Catalog/OpenSpec.Modules.Catalog.Contracts/OpenSpec.Modules.Catalog.Contracts.csproj" />
+    <ProjectReference Include="../../src/Modules/Orders/OpenSpec.Modules.Orders.Domain/OpenSpec.Modules.Orders.Domain.csproj" />
+    <ProjectReference Include="../../src/Modules/Orders/OpenSpec.Modules.Orders.Application/OpenSpec.Modules.Orders.Application.csproj" />
+    <ProjectReference Include="../../src/Modules/Orders/OpenSpec.Modules.Orders.Infrastructure/OpenSpec.Modules.Orders.Infrastructure.csproj" />
+    <ProjectReference Include="../../src/Modules/Orders/OpenSpec.Modules.Orders.Api/OpenSpec.Modules.Orders.Api.csproj" />
+    <ProjectReference Include="../../src/Modules/Orders/OpenSpec.Modules.Orders.Contracts/OpenSpec.Modules.Orders.Contracts.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NetArchTest.Rules" />
+  </ItemGroup>
+
+</Project>

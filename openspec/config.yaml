@@ -1,0 +1,19 @@
+schema: spec-driven
+
+context: |
+  Kiến trúc: modular monolith. Backend ASP.NET Core .NET 10 (backend/), frontend React + TS + Vite (frontend/).
+  Module chỉ được tham chiếu project *.Contracts của module khác.
+  Mỗi module dùng schema SQL Server riêng, EF Core migrations đặt trong *.Infrastructure của module.
+  Thay đổi API phải cập nhật api/openapi/openapi.json và chạy `npm run gen:api` ở frontend.
+  Capability trong openspec/specs đặt tên trùng module: users, catalog, orders.
+  openspec/specs mô tả hành vi; quyết định kỹ thuật ghi ở docs/adr.
+  Viết mọi artifact bằng tiếng Việt.
+
+rules:
+  proposal:
+    - Nêu rõ module bị ảnh hưởng và những gì nằm ngoài phạm vi
+  design:
+    - Nêu thay đổi schema DB, endpoint REST và contract giữa các module nếu có
+  tasks:
+    - Mỗi task ghi tiền tố [backend/<module>] hoặc [frontend/<module>]
+    - Mỗi tính năng có task test tương ứng: unit (backend), component (frontend), integration (API)

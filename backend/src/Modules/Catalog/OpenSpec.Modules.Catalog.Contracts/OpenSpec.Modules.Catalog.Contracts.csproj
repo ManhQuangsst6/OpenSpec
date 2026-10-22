@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="../../../Shared/OpenSpec.Shared.Contracts/OpenSpec.Shared.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
