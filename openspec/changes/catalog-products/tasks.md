@@ -11,7 +11,7 @@
 ## 3. Persistence
 
 - [x] 3.1 [backend/catalog] Cấu hình EF (`DbSet`, độ dài, `decimal(18,2)`, unique SKU, index CreatedAt, check constraint) + `IDesignTimeDbContextFactory`; tạo migration `InitialCatalog` và áp dụng vào SQLEXPRESS; verify bảng `catalog.Products`, index và constraint tồn tại
-- [ ] 3.2 [backend/catalog] Cài `ProductRepository` (tìm kiếm escape LIKE, lọc trạng thái, sắp xếp whitelist + `ThenBy(Id)`, ánh xạ lỗi unique → `SkuTaken`) và đăng ký DI; verify qua integration test ở nhóm 5
+- [x] 3.2 [backend/catalog] Cài `ProductRepository` (tìm kiếm escape LIKE, lọc trạng thái, sắp xếp whitelist + `ThenBy(Id)`, ánh xạ lỗi unique → `SkuTaken`) và đăng ký DI; verify qua integration test ở nhóm 5
 
 ## 4. Application
 
@@ -20,7 +20,7 @@
 ## 5. API
 
 - [x] 5.1 [backend/catalog] Map 5 endpoint `/api/catalog/products` với `TypedResults` + `ProducesProblem`, ánh xạ lỗi sang 400/404/409; verify gọi thật vào SQLEXPRESS (tạo, trùng SKU, sửa, sắp xếp, xoá)
-- [ ] 5.2 [backend/catalog] `ApiFactory` migrate thêm `CatalogDbContext`; viết `ProductsEndpointsTests` (CRUD, 201 + Location, 409, 404, validation nhiều trường, phân trang, tìm/lọc, sắp xếp giá + ổn định, sortBy lạ → 400); verify CI xanh
+- [x] 5.2 [backend/catalog] `ApiFactory` migrate thêm `CatalogDbContext`; viết `ProductsEndpointsTests` (CRUD, 201 + Location, 409, 404, validation nhiều trường, phân trang, tìm/lọc, sắp xếp giá + ổn định, sortBy lạ → 400); verify CI xanh
 - [x] 5.3 [backend/catalog] Xuất OpenAPI vào `api/openapi/openapi.json` và `npm run gen:api`; verify có path `/api/catalog/products` và `npm run typecheck` qua
 
 ## 6. Frontend
