@@ -1,33 +1,18 @@
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { apiClient } from '@/api/client'
 import type { components } from '@/api/generated/schema'
+import { toApiError } from '@/shared/api/apiError'
 
 export type User = components['schemas']['UserDto']
 export type UserInput = components['schemas']['CreateUserRequest']
 export type UsersPage = components['schemas']['PagedResultOfUserDto']
 
+export { ApiError } from '@/shared/api/apiError'
+
 export interface UsersQuery {
   page: number
   pageSize: number
   search?: string
-}
-
-type Problem = { status?: number | null; title?: string | null; errors?: Record<string, string[]> }
-
-/** Lỗi từ API: giữ status và lỗi theo trường (ValidationProblem) để form hiển thị. */
-export class ApiError extends Error {
-  readonly status: number
-  readonly fieldErrors: Record<string, string[]>
-
-  constructor(status: number, problem?: Problem) {
-    super(problem?.title ?? 'Có lỗi xảy ra, vui lòng thử lại.')
-    this.status = status
-    this.fieldErrors = problem?.errors ?? {}
-  }
-}
-
-function toApiError(response: Response, problem: unknown) {
-  return new ApiError(response.status, (problem ?? undefined) as Problem | undefined)
 }
 
 const usersKey = ['users'] as const

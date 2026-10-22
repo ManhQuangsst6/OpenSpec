@@ -18,7 +18,11 @@ builder.Services
 
 var app = builder.Build();
 
-app.UseExceptionHandler();
+app.UseExceptionHandler(new ExceptionHandlerOptions
+{
+    // Body JSON hỏng / sai kiểu → 400 thay vì 500
+    StatusCodeSelector = ex => ex is BadHttpRequestException bad ? bad.StatusCode : StatusCodes.Status500InternalServerError,
+});
 
 if (app.Environment.IsDevelopment())
 {
