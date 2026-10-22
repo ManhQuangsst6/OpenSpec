@@ -8,7 +8,7 @@
 
 - [x] 2.1 [backend/users] Thêm `DbSet<User>` và cấu hình entity (độ dài cột, unique index `Email`, index `CreatedAt`) cùng `IDesignTimeDbContextFactory`; verify `dotnet build` thành công
 - [ ] 2.2 [backend/users] Tạo migration `InitialUsers` trong `Persistence/Migrations` và áp dụng vào `.\SQLEXPRESS`; verify bảng `users.Users` và index tồn tại sau `dotnet ef database update`
-- [ ] 2.3 [backend/users] Cài đặt `IUserRepository` ở Infrastructure (phân trang, tìm kiếm `LIKE`, ánh xạ lỗi unique 2601/2627 sang `User.EmailTaken`) và đăng ký DI; verify qua integration test ở nhóm 4
+- [x] 2.3 [backend/users] Cài đặt `IUserRepository` ở Infrastructure (phân trang, tìm kiếm `LIKE`, ánh xạ lỗi unique 2601/2627 sang `User.EmailTaken`) và đăng ký DI; verify qua integration test ở nhóm 4
 
 ## 3. Application
 
@@ -17,7 +17,7 @@
 ## 4. API
 
 - [ ] 4.1 [backend/users] Map 5 endpoint trong `UsersModule` bằng `TypedResults`, ánh xạ mã lỗi sang 400/404/409 ProblemDetails; verify trên Scalar (`/scalar`) với SQLEXPRESS
-- [ ] 4.2 [backend/users] Nối `SqlServerFixture` vào `ApiFactory` (override `ConnectionStrings:Default`, chạy migration) và viết integration test `UsersEndpointsTests`: CRUD, 201 + Location, trùng email 409, 404, phân trang và tìm kiếm; verify `dotnet test` xanh trên CI
+- [x] 4.2 [backend/users] Nối `SqlServerFixture` vào `ApiFactory` (override `ConnectionStrings:Default`, chạy migration) và viết integration test `UsersEndpointsTests`: CRUD, 201 + Location, trùng email 409, 404, phân trang và tìm kiếm; verify `dotnet test` xanh trên CI
 - [x] 4.3 [backend/users] Xuất `/openapi/v1.json` vào `api/openapi/openapi.json` và chạy `npm run gen:api`; verify `schema.ts` có các path `/api/users` mới và `npm run typecheck` qua
 
 ## 5. Frontend
